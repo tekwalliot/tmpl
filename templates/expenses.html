@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% load static %} 
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/style_theme_1.css' %}">
+<link rel="stylesheet" href="{% static 'css/filterdate.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/datatables/dt-global_style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/datatables/buttons.dataTables.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/filterdate.js' %}"></script>
+<!-- BEGIN PAGE LEVEL CUSTOM SCRIPTS -->
+<script src="{% static 'js/datatables/datatables.js' %}"></script>
+<!-- NOTE TO Use Copy CSV Excel PDF Print Options You Must Include These Files  -->
+<script src="{% static 'js/datatables/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'js/datatables/jszip.min.js' %}"></script>    
+<script src="{% static 'js/datatables/buttons.html5.min.js' %}"></script>
+<script src="{% static 'js/datatables/buttons.print.min.js' %}"></script>
+<script src="{% static 'js/datatables/buttons.flash.min.js' %}"></script>
+<script src="{% static 'js/datatables/pdfmake.min.js' %}"></script>
+<script src="{% static 'js/datatables/vfs_fonts.js' %}"></script>
+<script src="{% static 'js/tableexport.js' %}"></script>
+<!--   <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script> -->
+<script src="{% static 'js/filterdate.js' %}"></script>
+
+<script type="text/javascript">
+$('#html5-extension').DataTable( {
+  autoWidth: false,
+  dom: 'lBfrtip', 
+  buttons: {
+      buttons: [{
+      extend: 'excel',
+      // orientation: 'landscape',
+      title: 'Expenses Register',
+      filename: 'Expenses_{{table.last.Date}}to{{table.first.Date}}',
+      className: 'btn-sm',
+      exportOptions: {
+      columns: [0, 1, 2, 3, 4, 5],
+      rows : {search:'applied'}},
+      messageTop: 'Report Duration - From: {{table.last.Date}} To: {{table.first.Date}},   Total Expenses: ₹ {{donset.tExpenses}},   Cash: ₹ {{donset.tCash}},   Online: ₹ {{donset.tOnline}}'},
+    {
+      extend: 'pdf',
+      // orientation: 'landscape',
+      title: 'Expenses Register',
+      filename: 'Expenses_{{table.last.Date}}to{{table.first.Date}}',
+      exportOptions: {
+      columns: [0, 1, 2, 3, 4, 5],
+      rows : {search:'applied'}}, 
+      customize: function ( doc ) {
+      doc.defaultStyle.fontSize = 9;
+      doc.defaultStyle.alignment = 'left';
+      doc.styles.tableHeader = {
+      fillColor:'#525659',
+      color:'#FFF',
+      fontSize: '9',
+      alignment: 'left',
+      bold: true,  }},        
+      className: 'btn-sm',
+      messageTop: 'Report Duration - From: {{table.last.Date}} To: {{table.first.Date}},   Total Expenses: ₹ {{donset.tExpenses}}',},
+    {
+      extend: 'print',
+      // orientation: 'landscape',
+      title: 'Expenses Register',
+      filename: 'Expenses_{{table.last.Date}}to{{table.first.Date}}',
+      className: 'btn-sm',
+      messageTop: 'Report Duration - From: {{table.last.Date}} To: {{table.first.Date}},   Total Expenses: ₹ {{donset.tExpenses}}',
+      filename: 'Expenses_{{table.last.Date}}to{{table.first.Date}}',},]},
+  "oLanguage": {
+    "sSearch": '',
+    "sSearchPlaceholder": "Search/Filter...",},
+  "stripeClasses": [],
+  "lengthMenu": [ [30, 50, 100, -1], [30, 50, 100, "All"] ],
+  "pageLength": 30,} );
+</script>
+{% endblock %}
+
+
+{% block content %}    
+<div class="page-header">
+    <h3 class="page-title"> Expenses Summary </h3>
+    <nav aria-label="breadcrumb">
+      <ol class="template-demo">
+        <button type="button" id="myBtn" class="btn1 btn1-info">ApplyFilters<i class="mdi mdi-filter btn-icon-append"></i></button>
+        <button type="button" id="myBtn1" onclick="location.href='{% url 'expns' %}'" class="btn1 btn1-success">Clear Filters<i class="mdi mdi-filter-remove btn-icon-prepend"></i></button>
+      </ol>
+    </nav>
+  </div>
+
+  <div id="addEventsModal" class="modal animated fadeIn"> 
+    <div class="modal-dialog modal-dialog-centered">                            
+      <!-- Modal content -->
+      <div class="card modal-content">
+          <div class="modal-body">
+              <span id="discard" data-dismiss="modal" class="close">&times;</span>
+              <div class="add-edit-event-box">
+                  <div class="add-edit-event-content">
+                      <div class="add-event-title edit-event-title"></div>
+                      <h5 class="modal-title">Search Data by Applying Filter</h5>
+                      <form class="">
+                          <div class="row">
+                              <div class="col-md-12">
+                                  <label style="font-weight: 200; color: black; font-size: 13px;">Towards</label>
+                                  {{ filter_data.form.Towards}}
+                              </div>
+                              <div class="col-md-12">
+                                  <label style="font-weight: 200; margin-top: 20px; color: black; font-size: 13px;">Expenses Category</label>
+                                  {{ filter_data.form.Category}}
+                              </div>
+                              <div class="col-md-6 col-sm-6 col-12">
+                                  <div class="form-group start-date">
+                                      <label style="margin-top: 20px; font-weight: 200; color: black; font-size: 13px;">From</label>
+                                      <input type="date" name="from_date" class="form-control">
+                                      <!-- {{ filter_data.form.from_date }} -->
+                                  </div>
+                              </div>
+                              <div class="col-md-6 col-sm-6 col-12">
+                                  <div class="form-group start-date">
+                                      <label style="margin-top: 20px; font-weight: 200; color: black; font-size: 13px;">To</label>
+                                      <input type="date" name="to_date" class="form-control">
+                                      <!-- {{ filter_data.form.to_date }} -->
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="modal-footer" style="margin-top: 20px; float:left; margin-left: -15px;">
+                          <button type="submit"  id="add-e" class="btn">Apply Filters</button>
+                          <!-- <button id="add-e" class="btn">Add Task</button> -->
+                          <button id="edit-event" class="btn"></button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>                                
+
+<div class="row">
+  <!-- Earnings (Monthly) Card Example -->
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body2">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Expenses</div>
+            <div class="h6 mb-0 font-weight-bold text-gray-800">₹ {{donset.tExpenses}}</div>
+          </div>
+          <div class="col-auto">
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Earnings (Monthly) Card Example -->
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-success shadow h-100 py-2">
+      <div class="card-body2">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Last 30 Days</div>
+            <div class="h6 mb-0 font-weight-bold text-gray-800">₹ {{donset.tMonth}}</div>
+          </div>
+          <div class="col-auto">
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+ 
+
+    <div class="grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body2">
+          <h4 class="card-title d-inline-block" style="margin-left: 20px;">Expenses Details</h4>
+          <button  onclick="location.href='{% url 'expnform' 'create' 1 %}'" class="btn1 btn1-sm btn1-info float-right mdi mdi-library-plus" style="margin-right: 20px;">&nbsp;Add</button>
+          <div class="table-responsive">
+          <table class="table table-bordered table-striped" id="html5-extension">
+            <thead style="color: white; background:  #02BAD6; font-weight: 10 ;">
+              <tr>
+                <th>#</th>
+                <th>Date of Expenses</th>
+                <th>Amount</th>
+                <th>Towards</th>
+                <th>Category</th>
+                <th>Paid Through</th>
+                <th>By</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for x in table %}
+              <tr>
+                <td style="width:10px;"> {{forloop.counter}}</td>
+                <td style="width:15px;"> {{x.Date|date:'d M Y'}} </td>
+                <td style="width:10px;"> {{x.Amount}} </td>
+                <td style="white-space:normal;"> {{x.Towards}} </td>
+                <td style="white-space:normal;"> {{x.Category}} </td>
+                <td style="white-space:normal;"> {{x.Paid_Through}} </td>
+                <td style="white-space:normal;"> {{x.By.Name}} </td>      
+                <td style="width:10px;">
+                <a class="mdi mdi-border-color bs-tooltip" title="Update" href="{% url 'expnform' 'updt' x.id %}"></a>&nbsp;&nbsp;&nbsp;               
+                <a class="mdi mdi-delete bs-tooltip" title="Delete" href="{% url 'expnform' 'dlt' x.id %}"></a>
+              </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+

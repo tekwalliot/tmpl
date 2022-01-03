@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %} 
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/style_theme_1.css' %}">
+<link rel="stylesheet" href="{% static 'css/filterdate.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/datatables/dt-global_style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/datatables/buttons.dataTables.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/filterdate.js' %}"></script>
+<!-- BEGIN PAGE LEVEL CUSTOM SCRIPTS -->
+<script src="{% static 'js/datatables/datatables.js' %}"></script>
+<!-- NOTE TO Use Copy CSV Excel PDF Print Options You Must Include These Files  -->
+<script src="{% static 'js/datatables/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'js/datatables/jszip.min.js' %}"></script>    
+<script src="{% static 'js/datatables/buttons.html5.min.js' %}"></script>
+<script src="{% static 'js/datatables/buttons.print.min.js' %}"></script>
+<script src="{% static 'js/datatables/buttons.flash.min.js' %}"></script>
+<script src="{% static 'js/datatables/pdfmake.min.js' %}"></script>
+<script src="{% static 'js/datatables/vfs_fonts.js' %}"></script>
+<script src="{% static 'js/tableexport.js' %}"></script>
+<!--   <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script> -->
+<script src="{% static 'js/filterdate.js' %}"></script>
+
+<script type="text/javascript">
+$('#html5-extension').DataTable( {
+  autoWidth: false,
+  dom: 'lBfrtip', 
+  buttons: {
+      buttons: [{
+      extend: 'excel',
+      // orientation: 'landscape',
+      title: 'Staff Register',
+      filename: 'StaffDetails',
+      className: 'btn-sm',
+      exportOptions: {
+      columns: [0, 1, 2, 3, 4, 5, 6],
+      rows : {search:'applied'}},
+      messageTop: ''},
+    {
+      extend: 'pdf',
+      // orientation: 'landscape',
+      title: 'Staff Register',
+      filename: 'StaffDetails',
+      exportOptions: {
+      columns: [0, 1, 2, 3, 4, 5, 6],
+      rows : {search:'applied'}}, 
+      customize: function ( doc ) {
+      doc.defaultStyle.fontSize = 9;
+      doc.defaultStyle.alignment = 'left';
+      doc.styles.tableHeader = {
+      fillColor:'#525659',
+      color:'#FFF',
+      fontSize: '9',
+      alignment: 'left',
+      bold: true,  }},        
+      className: 'btn-sm',
+      messageTop: '',},
+    {
+      extend: 'print',
+      // orientation: 'landscape',
+      title: 'Staff Register',
+      className: 'btn-sm',
+      messageTop: '',
+      filename: 'StaffDetails',},]},
+  "oLanguage": {
+    "sSearch": '',
+    "sSearchPlaceholder": "Search/Filter...",},
+  "stripeClasses": [],
+  "lengthMenu": [ [30, 50, 100, -1], [30, 50, 100, "All"] ],
+  "pageLength": 30,} );
+</script>
+{% endblock %}
+
+
+{% block content %}    
+                           
+    <div class="grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body2">
+          <h4 class="card-title d-inline-block" style="margin-left: 20px;">Staff Details</h4>
+          <button  onclick="location.href='{% url 'stfform' 'create' 1 %}'" class="btn1 btn1-sm btn1-info float-right mdi mdi-library-plus" style="margin-right: 20px;">&nbsp;Add</button>
+          <div class="table-responsive">
+          <table class="table table-bordered table-striped" id="html5-extension">
+            <thead style="color: white; background:  #02BAD6; font-weight: 10 ;">
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Designation</th>
+                <th>Phone Number</th>
+                <th>Address</th>
+                <th>Join Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for x in table %}
+              <tr>
+                <td style="width:10px;"> {{forloop.counter}}</td>
+                <td style="width:20px;"> {{x.Name}} </td>
+                <td style="width:20px;"> {{x.Designation}} </td>
+                <td style="width:10px;"> {{x.Phone_No}} </td>
+                <td style="white-space:normal;"> {{x.Address}} </td>
+                <td style="width:15px;"> {{x.Join_Date|date:'d M Y'}} </td>
+                {% if x.Is_Active == True %}
+                <td style="width:10px;"> Active </td>
+                {% else %}
+                <td style="width:10px; color: red;"> Not Active </td>
+                {% endif %}   
+                <td style="width:10px;">
+                <a class="mdi mdi-border-color bs-tooltip" title="Update" href="{% url 'stfform' 'updt' x.id %}"></a>&nbsp;&nbsp;&nbsp;               
+<!--                 <a class="mdi mdi-delete bs-tooltip" title="Delete" href="{% url 'stfform' 'dlt' x.id %}"></a> -->
+              </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+

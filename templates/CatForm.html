@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %} 
+
+{% block content %}
+<div class="row">
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body"> 
+        <h4 class="card-title d-inline-block">Donation Category Form</h4>
+        {% if update == 'True' %}
+          <form class="forms-sample" action="" method="POST" enctype="multipart/form-data">
+        {% else %}
+        <button  onclick="location.href='{% url 'cat'  %}'" class="btn1 btn1-sm btn1-info float-right mdi  mdi-clipboard-outline">&nbsp;View</button>
+          <form class="forms-sample" action="{% url 'catform' 'create' 1 %}" method="POST" enctype="multipart/form-data">
+        {% endif %}
+            <div class="form-group mb-4">
+              {% csrf_token %}              
+              {% for field in form %}
+                <div class="form-group">
+                  <label for="{{ field.label }}">{{ field.label }}</label>{{ field}}
+                </div>
+              {% endfor %}   
+            </div>
+          <button type="submit" style="margin-left: 6px" class="btn2 btn2-sm btn2-primary">Submit</button>     
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} 

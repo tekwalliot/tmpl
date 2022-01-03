@@ -1,0 +1,304 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/style_theme_1.css' %}">
+<link rel="stylesheet" href="{% static 'css/filterdate.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/datatables/dt-global_style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/datatables/buttons.dataTables.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+{% endblock %} 
+
+{% block scripts %}
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular.min.js"></script> 
+<script src="{% static 'charts/Chart.min.js' %}"></script>
+<script src="{% static 'charts/apexcharts.min.js' %}"></script>
+<!-- <script src="{% static 'chart.js/apexcharts.js' %}"></script> -->
+<script src="{% static 'charts/charts.js' %}"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> -->
+<script src="{% static 'js/filterdate.js' %}"></script>
+<!-- BEGIN PAGE LEVEL CUSTOM SCRIPTS -->
+<script src="{% static 'js/datatables/datatables.js' %}"></script>
+<!-- NOTE TO Use Copy CSV Excel PDF Print Options You Must Include These Files  -->
+<script src="{% static 'js/datatables/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'js/datatables/jszip.min.js' %}"></script>    
+<script src="{% static 'js/datatables/buttons.html5.min.js' %}"></script>
+<script src="{% static 'js/datatables/buttons.print.min.js' %}"></script>
+<script src="{% static 'js/datatables/buttons.flash.min.js' %}"></script>
+<script src="{% static 'js/datatables/pdfmake.min.js' %}"></script>
+<script src="{% static 'js/datatables/vfs_fonts.js' %}"></script>
+<script src="{% static 'js/tableexport.js' %}"></script>
+<!--   <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script> -->
+<script type="text/javascript">
+$('#html5-extension').DataTable( {
+  autoWidth: false,
+  dom: 'lBfrtip', 
+  buttons: {
+      buttons: [{
+      extend: 'excel',
+      orientation: 'landscape',
+      title: 'Donations Register',
+      filename: 'Donations_{{table.last.Date}}to{{table.first.Date}}',
+      className: 'btn-sm',
+      exportOptions: {
+      columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      rows : {search:'applied'}},
+      messageTop: 'Report Duration - From: {{table.last.Date}} To: {{table.first.Date}},   Total Donations: ₹ {{donset.tDonations}},   Cash: ₹ {{donset.tCash}},   Online: ₹ {{donset.tOnline}}'},
+    {
+      extend: 'pdf',
+      orientation: 'landscape',
+      title: 'Donations Register',
+      filename: 'Donations_{{table.last.Date}}to{{table.first.Date}}',
+      exportOptions: {
+      columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      rows : {search:'applied'}}, 
+      customize: function ( doc ) {
+      doc.defaultStyle.fontSize = 9;
+      doc.defaultStyle.alignment = 'left';
+      doc.styles.tableHeader = {
+      fillColor:'#525659',
+      color:'#FFF',
+      fontSize: '9',
+      alignment: 'left',
+      bold: true,  }},        
+      className: 'btn-sm',
+      messageTop: 'Report Duration - From: {{table.last.Date}} To: {{table.first.Date}},   Total Donations: ₹ {{donset.tDonations}},   Cash: ₹ {{donset.tCash}},   Online: ₹ {{donset.tOnline}}',
+      filename: 'Donations_{{table.last.Date}}to{{table.first.Date}}',},
+    {
+      extend: 'print',
+      orientation: 'landscape',
+      title: 'Donations Register',
+      filename: 'Donations_{{table.last.Date}}to{{table.first.Date}}',
+      className: 'btn-sm',
+      messageTop: 'Report Duration - From: {{table.last.Date}} To: {{table.first.Date}},   Total Donations: ₹ {{donset.tDonations}},   Cash: ₹ {{donset.tCash}},   Online: ₹ {{donset.tOnline}}',
+      filename: 'Donations_{{table.last.Date}}to{{table.first.Date}}',},]},
+  "oLanguage": {
+    "sSearch": '',
+    "sSearchPlaceholder": "Search/Filter...",},
+  "stripeClasses": [],
+  "lengthMenu": [ [30, 50, 100, -1], [30, 50, 100, "All"] ],
+  "pageLength": 30,} );
+</script>
+<script type="text/javascript">
+$('#html5-extension1').DataTable( {
+  autoWidth: false,
+  dom: 'lBfrtip', 
+  buttons: {
+      buttons: [{
+      extend: 'excel',
+      // orientation: 'landscape',
+      title: 'Expenses Register',
+      filename: 'Expenses_{{table.last.Date}}to{{table.first.Date}}',
+      className: 'btn-sm',
+      exportOptions: {
+      columns: [0, 1, 2, 3, 4, 5],
+      rows : {search:'applied'}},
+      messageTop: 'Report Duration - From: {{table.last.Date}} To: {{table.first.Date}},   Total Expenses: ₹ {{donset.tExpenses}},   Cash: ₹ {{donset.tCash}},   Online: ₹ {{donset.tOnline}}'},
+    {
+      extend: 'pdf',
+      // orientation: 'landscape',
+      title: 'Expenses Register',
+      filename: 'Expenses_{{table.last.Date}}to{{table.first.Date}}',
+      exportOptions: {
+      columns: [0, 1, 2, 3, 4, 5],
+      rows : {search:'applied'}}, 
+      customize: function ( doc ) {
+      doc.defaultStyle.fontSize = 9;
+      doc.defaultStyle.alignment = 'left';
+      doc.styles.tableHeader = {
+      fillColor:'#525659',
+      color:'#FFF',
+      fontSize: '9',
+      alignment: 'left',
+      bold: true,  }},        
+      className: 'btn-sm',
+      messageTop: 'Report Duration - From: {{table.last.Date}} To: {{table.first.Date}},   Total Expenses: ₹ {{donset.tExpenses}}',},
+    {
+      extend: 'print',
+      // orientation: 'landscape',
+      title: 'Expenses Register',
+      filename: 'Expenses_{{table.last.Date}}to{{table.first.Date}}',
+      className: 'btn-sm',
+      messageTop: 'Report Duration - From: {{table.last.Date}} To: {{table.first.Date}},   Total Expenses: ₹ {{donset.tExpenses}}',
+      filename: 'Expenses_{{table.last.Date}}to{{table.first.Date}}',},]},
+  "oLanguage": {
+    "sSearch": '',
+    "sSearchPlaceholder": "Search/Filter...",},
+  "stripeClasses": [],
+  "lengthMenu": [ [30, 50, 100, -1], [30, 50, 100, "All"] ],
+  "pageLength": 30,} );
+</script>
+{% endblock %}
+
+{% block content %}
+<div ng-app = "myApp" ng-controller = "MainCtrl" class="containerCus">
+  <div class="page-header">
+    <h3 class="page-title">
+      <span class="page-title-icon bg-gradient-primary text-white mr-2">
+        <i class="mdi mdi-home"></i>
+      </span> Dashboard 
+    </h3>
+  </div> 
+
+  <div class="row">
+  <div class="col-md-4 stretch-card grid-margin">
+    <div class="card bg-gradient-primary card-img-holder text-white">
+      <div class="card-body1">
+        <img src="{% static 'img/circle.svg' %}" class="card-img-absolute" alt="circle-image" />
+        <h4 class="font-weight-normal mb-3">Total Donations<i class="mdi mdi-chevron-double-left mdi-24px float-right"></i>
+        </h4>
+        <h2 class="mb-5">Paid ₹ {{dset.tDon}},  Due {{ dset.tDue }}</h2>
+        <h6 class="card-text">Cash: ₹ {{dset.tDonCash}}, Online ₹ {{dset.tDonOnline}}, Hundi ₹ {{ dset.hundi }}</h6>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 stretch-card grid-margin">
+    <div class="card bg-gradient-success card-img-holder text-white">
+      <div class="card-body1">
+        <img src="{% static 'img/circle.svg' %}" class="card-img-absolute" alt="circle-image" />
+        <h4 class="font-weight-normal mb-3">Total Expenses<i class="mdi mdi-chevron-double-right mdi-24px float-right"></i>
+        </h4>
+        <h2 class="mb-5">₹ {{dset.tExp}}</h2>
+        <h6 class="card-text">Cash: ₹ {{dset.tExpCash}}, Online ₹ {{dset.tExpOnline}}</h6>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 stretch-card grid-margin">
+    <div class="card bg-gradient-info card-img-holder text-white">
+      <div class="card-body1">
+        <img src="{% static 'img/circle.svg' %}" class="card-img-absolute" alt="circle-image" />
+        <h4 class="font-weight-normal mb-3">Balance Available<i class="mdi mdi-wallet-travel mdi-24px float-right"></i>
+        </h4>
+        <h2 class="mb-5">₹ {{dset.Bal}}</h2>
+        <h6 class="card-text">Cash: ₹ {{dset.BalCash}}, Online ₹ {{dset.BalOnline}}</h6>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row"> 
+  <div class="col-xl-12 col-lg-7">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h7 class="m-1 font-weight-bold ">Daily Donations</h7>
+        <div>
+        <input type="date" ng-model="req_date" style="width: 135px; font-size: 13.65px">
+        <button class="btn1 btn1-primary" ng-click="FILT()">Submit</button>
+      </div>                         
+      </div>
+      <div class="card-body1">
+        <!-- <div class="card-body1" style="margin-bottom: -80px"> -->
+        <div id="chart"></div>  
+      </div>
+    </div>
+  </div>
+</div> 
+<div class="appear-animation animated bounceInRight appear-animation-visible" ng-init="FILTInit()">
+  
+
+<ul class="nav nav-tabs mt-3" id="border-tabs" role="tablist">
+<li class="nav-item">
+    <a class="nav-link active mdi mdi-camera mdi-18px" id="border-home-tab" data-toggle="tab" href="#border-home" role="tab" aria-controls="border-home" aria-selected="true">&nbsp;&nbsp;Daily Donations</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link mdi mdi-account-card-details mdi-18px" id="border-profile-tab" data-toggle="tab" href="#border-profile" role="tab" aria-controls="border-profile" aria-selected="false">&nbsp;&nbsp;Daily Expenses</a>
+</li>
+</ul>
+
+<div class="tab-content mb-4" id="border-tabsContent">
+  <div class="tab-pane fade show active" id="border-home" role="tabpanel" aria-labelledby="border-home-tab">
+    <div class="grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body2">
+        <!-- <h4 class="card-title d-inline-block" style="margin-left: 20px;">Visiting Requests</h4> -->
+        <div class="table-responsive m-t-40">
+                             <table class="table table-bordered table-striped" id="html5-extension">
+            <thead style="color: white; background:  #02BAD6; font-weight: 10 ;">
+              <tr>
+                <th>#</th>
+                <th>Donaor Name</th>
+                <th>Gothram</th>
+                <th>Towards</th>
+                <th>Amount</th>
+                <th>Satus</th>
+                <th>Issued By</th>
+                <th>Receipt<br>Date</th>
+                <th>Receipt</th>
+                <th>Phone<br>Number</th>
+                <th>Address</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for x in table1 %}
+              <tr>
+                <td style="width:10px;"> {{forloop.counter}}</td>
+                <td style="white-space:normal;"><a style="color:black;" title="Update" href="{% url 'donform' 'updt' x.id 'Donor Name' %}">{{x.Donor_Name}}</a></td>
+                <td style="white-space:normal;"><a style="color:black;" title="Update" href="{% url 'donform' 'updt' x.id 'Gothram' %}"> {{x.Gothram}} </a></td>
+                <td style="white-space:normal;"><a style="color:black;" title="Update" href="{% url 'donform' 'updt' x.id 'Donation Towards' %}"> {{x.Donation_Towards}} </a></td>
+                <td style="width:10px;"><a style="color:black;" title="Update" href="{% url 'donform' 'updt' x.id 'Amount' %}"> {{x.Amount}} </a></td>
+                {% if x.Paid_Through == 'Due' %}
+                <td style="width:10px; background: red;"><a style="color:black;" title="Update" href="{% url 'donform' 'updt' x.id 'Paid Through' %}"> {{x.Paid_Through}} </a></td>
+                {% else %}
+                <td style="width:10px;"><a style="color:black;" title="Update" href="{% url 'donform' 'updt' x.id 'Paid Through' %}"> {{x.Paid_Through}} </a></td>
+                {% endif %}
+                <td style="width:10px;"><a style="color:black;" title="Update" href="{% url 'donform' 'updt' x.id 'Issued By' %}"> {{x.Issued_By}} </a></td>
+                <td style="width:15px;"><a style="color:black;" title="Update" href="{% url 'donform' 'updt' x.id 'Date' %}"> {{x.Date|date:'d M Y'}} </a></td>
+                <td style="width:10px;">               
+                <a class="mdi mdi-attach bs-tooltip" title="Send Receipt" href="{% url 'receipt' x.id %}">{{ x.Receipt_No }}</a>
+              </td>
+                <td style="width:15px;"><a style="color:black;" style="color:black;" title="Update" href="{% url 'donform' 'updt' x.id 'Phone No' %}"> {{x.Phone_No}} </a></td>
+                <td style="white-space:normal;"><a style="color:black;" style="color:black;" title="Update" href="{% url 'donform' 'updt' x.id 'Address' %}"> {{x.Address}} </a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tab-pane fade" id="border-profile" role="tabpanel" aria-labelledby="border-profile-tab">
+    <div class="card">
+      <div class="card-body2">
+        <div class="table-responsive m-t-40">
+          <table class="table table-bordered table-striped" id="html5-extension1">
+            <thead style="color: white; background:  #02BAD6; font-weight: 10 ;">
+              <tr>
+                <th>#</th>
+                <th>Date of Expenses</th>
+                <th>Amount</th>
+                <th>Towards</th>
+                <th>Category</th>
+                <th>By</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for x in table2 %}
+              <tr>
+                <td style="width:10px;"> {{forloop.counter}}</td>
+                <td style="width:15px;"> {{x.Date|date:'d M Y'}} </td>
+                <td style="width:10px;"> {{x.Amount}} </td>
+                <td style="white-space:normal;"> {{x.Towards}} </td>
+                <td style="white-space:normal;"> {{x.Category}} </td>
+                <td style="white-space:normal;"> {{x.By.Name}} </td>      
+                <td style="width:10px;">
+                <a class="mdi mdi-border-color bs-tooltip" title="Update" href="{% url 'expnform' 'updt' x.id %}"></a>&nbsp;&nbsp;&nbsp;               
+                <a class="mdi mdi-delete bs-tooltip" title="Delete" href="{% url 'expnform' 'dlt' x.id %}"></a>
+              </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+      </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+</div>
+{% endblock %}

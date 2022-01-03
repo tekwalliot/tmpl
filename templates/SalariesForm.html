@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %} 
+
+{% block content %}
+<div class="row">
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body"> 
+        <h4 class="card-title d-inline-block">Salaries Issue Form</h4>
+        {% if update == 'True' %}
+          <form class="forms-sample" action="" method="POST" enctype="multipart/form-data">
+        {% else %}
+        <button  onclick="location.href='{% url 'sal'  %}'" class="btn1 btn1-sm btn1-info float-right mdi  mdi-clipboard-outline">&nbsp;View</button>
+          <form class="forms-sample" action="{% url 'salform' 'create' 1 %}" method="POST" enctype="multipart/form-data">
+        {% endif %}
+            <div class="form-group mb-4">
+              {% csrf_token %}              
+              {% for field in form %}
+              {% if field.label != 'Date' %}
+                <div class="form-group">
+                  <label for="{{ field.label }}">{{ field.label }}</label>{{ field}}
+                </div>
+              {% endif %}
+              {% endfor %}
+              <div class="form-group start-date">
+                  <label style="margin-top: 20px; font-weight: 200; color: black; font-size: 13px;">Issued Date</label>
+                  <input type="date" name="Date" class="form-control">
+                  <!-- {{ filter_data.form.from_date }} -->
+              </div>  
+            </div>
+          <button type="submit" style="margin-left: 6px" class="btn2 btn2-sm btn2-primary">Submit</button>     
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} 
